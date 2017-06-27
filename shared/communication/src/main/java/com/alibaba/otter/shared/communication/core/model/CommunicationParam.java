@@ -16,53 +16,26 @@
 
 package com.alibaba.otter.shared.communication.core.model;
 
-/**
- * 连接参数类，<strong>如果参数有变化，需要酌情考虑是否更新相应的hashcode & equals方法</strong>
- * 
- * @author jianghang 2011-9-9 下午07:16:59
- */
+/* 连接参数类，如果参数有变化，需要酌情考虑是否更新相应的hashcode & equals方法 */
 public class CommunicationParam {
-
-    private String              ip;                                 // 通讯ip
-    private int                 port;                               // 通讯端口
+    private String ip;  // 通讯ip
+    private int port;   // 通讯端口
     private CummunicationMethod comMethod = CummunicationMethod.RMI; // 通讯方式
 
-    /**
-     * 远程通讯方式
-     */
+    /* 远程通讯方式 */
     private static enum CummunicationMethod {
         RMI;
     }
 
     // ================ setter / getter ====================
 
-    public CummunicationMethod getComMethod() {
-        return comMethod;
-    }
-
-    public void setComMethod(String comMethod) {
-        CummunicationMethod.valueOf(comMethod);
-    }
-
-    public void setComMethod(CummunicationMethod comMethod) {
-        this.comMethod = comMethod;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
+    public CummunicationMethod getComMethod() { return comMethod; }
+    public void setComMethod(String comMethod) { CummunicationMethod.valueOf(comMethod); }
+    public void setComMethod(CummunicationMethod comMethod) { this.comMethod = comMethod; }
+    public String getIp() { return ip; }
+    public void setIp(String ip) { this.ip = ip; }
+    public int getPort() { return port; }
+    public void setPort(int port) { this.port = port; }
 
     // ==================== hashcode & equals ===================
 
@@ -105,5 +78,4 @@ public class CommunicationParam {
         }
         return true;
     }
-
 }

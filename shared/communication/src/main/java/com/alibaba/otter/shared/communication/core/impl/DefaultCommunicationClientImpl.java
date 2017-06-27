@@ -44,34 +44,27 @@ import com.alibaba.otter.shared.communication.core.model.Callback;
 import com.alibaba.otter.shared.communication.core.model.CommunicationParam;
 import com.alibaba.otter.shared.communication.core.model.Event;
 
-/**
- * 通讯交互的client的默认实现实现
- * 
- * @author jianghang
- */
+/* 通讯交互的client的默认实现实现 */
 public class DefaultCommunicationClientImpl implements CommunicationClient {
-
     private static final Logger            logger     = LoggerFactory.getLogger(DefaultCommunicationClientImpl.class);
 
-    private CommunicationConnectionFactory factory    = null;
+    private CommunicationConnectionFactory factory    = null;   /* 获得远端对rpc服务 */
     private int                            poolSize   = 10;
     private ExecutorService                executor   = null;
     private int                            retry      = 3;
     private int                            retryDelay = 1000;
     private boolean                        discard    = false;
 
-    public DefaultCommunicationClientImpl(){
-    }
-
-    public DefaultCommunicationClientImpl(CommunicationConnectionFactory factory){
-        this.factory = factory;
-    }
+    public DefaultCommunicationClientImpl(){ }
+    public DefaultCommunicationClientImpl(CommunicationConnectionFactory factory){ this.factory = factory; }
 
     public void initial() {
         RejectedExecutionHandler handler = null;
         if (discard) {
+            // 忽略
             handler = new ThreadPoolExecutor.DiscardPolicy();
         } else {
+            // 抛异常
             handler = new ThreadPoolExecutor.AbortPolicy();
         }
 
@@ -79,11 +72,9 @@ public class DefaultCommunicationClientImpl implements CommunicationClient {
                                           new LinkedBlockingQueue<Runnable>(10 * 1000),
                                           new NamedThreadFactory("communication-async"), handler);
     }
+    public void destory() { executor.shutdown(); }
 
-    public void destory() {
-        executor.shutdown();
-    }
-
+    // 将event提交给服务端
     public Object call(final String addr, final Event event) {
         Assert.notNull(this.factory, "No factory specified");
         CommunicationParam params = buildParams(addr);
@@ -125,6 +116,7 @@ public class DefaultCommunicationClientImpl implements CommunicationClient {
         });
     }
 
+    // 多线程并发调用各个服务端
     public Object call(final String[] addrs, final Event event) {
         Assert.notNull(this.factory, "No factory specified");
         if (addrs == null || addrs.length == 0) {
@@ -206,17 +198,13 @@ public class DefaultCommunicationClientImpl implements CommunicationClient {
         });
     }
 
-    /**
-     * 直接提交一个异步任务
-     */
+    /* 直接提交一个异步任务 */
     public Future submit(Runnable call) {
         Assert.notNull(this.factory, "No factory specified");
         return executor.submit(call);
     }
 
-    /**
-     * 直接提交一个异步任务
-     */
+    /* 直接提交一个异步任务 */
     public Future submit(Callable call) {
         Assert.notNull(this.factory, "No factory specified");
         return executor.submit(call);
@@ -243,28 +231,10 @@ public class DefaultCommunicationClientImpl implements CommunicationClient {
 
     // ============================= setter / getter ==========================
 
-    public void setFactory(CommunicationConnectionFactory factory) {
-        this.factory = factory;
-    }
-
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
-
-    public void setRetry(int retry) {
-        this.retry = retry;
-    }
-
-    public void setRetryDelay(int retryDelay) {
-        this.retryDelay = retryDelay;
-    }
-
-    public void setPoolSize(int poolSize) {
-        this.poolSize = poolSize;
-    }
-
-    public void setDiscard(boolean discard) {
-        this.discard = discard;
-    }
-
+    public void setFactory(CommunicationConnectionFactory factory) { this.factory = factory; }
+    public void setExecutor(ExecutorService executor) { this.executor = executor; }
+    public void setRetry(int retry) { this.retry = retry; }
+    public void setRetryDelay(int retryDelay) { this.retryDelay = retryDelay; }
+    public void setPoolSize(int poolSize) { this.poolSize = poolSize; }
+    public void setDiscard(boolean discard) { this.discard = discard; }
 }

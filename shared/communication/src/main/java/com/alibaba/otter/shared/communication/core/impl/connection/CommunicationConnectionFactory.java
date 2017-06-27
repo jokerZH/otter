@@ -18,14 +18,12 @@ package com.alibaba.otter.shared.communication.core.impl.connection;
 
 import com.alibaba.otter.shared.communication.core.model.CommunicationParam;
 
-/**
- * {@linkplain CommunicationConnection}链接创建和关闭工厂
- * 
- * @author jianghang 2011-9-9 下午05:24:09
- */
+/* 链接创建和关闭工厂, 用于抽象rpc rmi/dubbo */
 public interface CommunicationConnectionFactory {
 
+    /* TODO */
     CommunicationConnection createConnection(CommunicationParam params);
 
+    /* TODO */
     void releaseConnection(CommunicationConnection connection);
 }

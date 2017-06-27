@@ -30,22 +30,15 @@ import com.alibaba.otter.shared.communication.core.model.CommunicationParam;
 import com.google.common.base.Function;
 import com.google.common.collect.MapMaker;
 
-/**
- * dubbo rpc服务链接的factory
- * 
- * @author jianghang 2011-11-29 上午11:13:31
- * @version 4.0.0
- */
+/* dubbo rpc服务链接的factory */
 public class DubboCommunicationConnectionFactory implements CommunicationConnectionFactory {
+    private final String DUBBO_SERVICE_URL = "dubbo://{0}:{1}/endpoint?client=netty&codec=dubbo&serialization=java&lazy=true&iothreads=4&threads=50&connections=30&acceptEvent.timeout=50000";
 
-    private final String                       DUBBO_SERVICE_URL = "dubbo://{0}:{1}/endpoint?client=netty&codec=dubbo&serialization=java&lazy=true&iothreads=4&threads=50&connections=30&acceptEvent.timeout=50000";
+    private DubboProtocol protocol = DubboProtocol.getDubboProtocol();
+    private ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getExtension("javassist");
+    private Map<String, CommunicationEndpoint/*服务*/> connections = null;
 
-    private DubboProtocol                      protocol          = DubboProtocol.getDubboProtocol();
-    private ProxyFactory                       proxyFactory      = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getExtension("javassist");
-
-    private Map<String, CommunicationEndpoint> connections       = null;
-
-    public DubboCommunicationConnectionFactory(){
+    public DubboCommunicationConnectionFactory() {
         connections = new MapMaker().makeComputingMap(new Function<String, CommunicationEndpoint>() {
 
             public CommunicationEndpoint apply(String serviceUrl) {
@@ -66,8 +59,5 @@ public class DubboCommunicationConnectionFactory implements CommunicationConnect
 
     }
 
-    public void releaseConnection(CommunicationConnection connection) {
-        // do nothing
-    }
-
+    public void releaseConnection(CommunicationConnection connection) { }
 }

@@ -21,28 +21,13 @@ import java.util.List;
 import com.alibaba.otter.shared.common.model.statistics.table.TableStat;
 import com.alibaba.otter.shared.communication.core.model.Event;
 
-/**
- * table stat事件
- * 
- * @author jianghang
- */
+/* table stat事件 提交给rpc服务端 */
 public class TableStatEvent extends Event {
-
     private static final long serialVersionUID = -5925977847006864387L;
-
-    public TableStatEvent(){
-        super(StatisticsEventType.tableStat);
-
-    }
-
     private List<TableStat> stats;
 
-    public List<TableStat> getStats() {
-        return stats;
-    }
+    public TableStatEvent(){ super(StatisticsEventType.tableStat); }
 
-    public void setStats(List<TableStat> stats) {
-        this.stats = stats;
-    }
-
+    public List<TableStat> getStats() { return stats; }
+    public void setStats(List<TableStat> stats) { this.stats = stats; }
 }
